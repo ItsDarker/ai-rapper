@@ -1,21 +1,25 @@
 @import url('https://fonts.googleapis.com/css2?family=Manrope:wght@400;700;800&display=swap');
 
-body {
-    margin: 0;
-    padding: 0;
-    font-family: 'Manrope', sans-serif;
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: "Eudoxus Sans", sans-serif;
+  scroll-behavior: smooth;
+
 }
+
 
 .root {
     display: flex;
     place-content: center flex-start;
     align-items: center;
-    background-color: rgb(0, 0, 0);
+    background-image: url(../assets/bg.png);
     flex-flow: column nowrap;
     gap: 10px;
     height: 100vh;
     overflow: auto;
-    padding: 0px;
+    padding: 10px;
     position: relative;
 }
 
@@ -29,7 +33,7 @@ body {
     height: fit-content;
     max-width: 975px;
     overflow: auto;
-    padding: 50px;
+    padding: 120px 20px 20px 20px;
     position: relative;
     width: auto;
     gap: 64px;
@@ -80,14 +84,14 @@ body {
 
 .prompt-box {
     border-bottom-width: 1px;
-    border-color: rgba(255, 255, 255, 0.1);
+    border-color: rgb(0, 208, 255);
     border-left-width: 1px;
     border-right-width: 1px;
     border-style: solid;
     border-top-width: 1px;
     place-content: flex-start;
     align-items: flex-start;
-    background-color: rgba(255, 255, 255, 0.05);
+    background-color: rgba(248, 58, 58, 0);
     border-radius: 16px;
     display: flex;
     flex: 0 0 auto;
@@ -108,18 +112,18 @@ body {
     letter-spacing: 0px;
     line-height: 1.6em;
     text-align: start;
-    color: rgba(255, 255, 255, 0.75);
+    color: white;
     text-decoration: none;
     text-transform: none;
 }
 
 textarea {
-    font-family: 'Manrope', sans-serif;
+    font-family:  'Roboto', sans-serif;
 }
 
 
 .prompt-box:focus {
-    border-color:rgba(255, 255, 255, 0.75)
+    border-color:rgb(255, 79, 18)
 }
 
 
@@ -323,7 +327,7 @@ textarea {
 .output-content p {
     text-align: center;
     white-space: pre-line;
-    color: rgba(255, 255, 255, 0.5);
+    color: rgba(0, 208, 255 );
 }
 
 @media (min-width: 810px) and (max-width: 1199px) {

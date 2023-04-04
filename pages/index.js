@@ -1,13 +1,17 @@
-import { useEffect } from 'react';
-import Head from 'next/head';
-import Image from 'next/image';
-import buildspaceLogo from '../assets/buildspace-logo.png';
-import { useState } from 'react';
+import { useEffect, useState } from "react";
+import Head from "next/head";
+import { motion } from "framer-motion";
+import {
+  headVariants,
+  slideIn,
+  staggerContainer,
+  textVariant,
+} from "../utils/motion";
 
 const Home = () => {
-  const [userInput, setUserInput] = useState('');
+  const [userInput, setUserInput] = useState("");
   const [lyrics, setLyrics] = useState([]);
-  const [currentLine, setCurrentLine] = useState('');
+  const [currentLine, setCurrentLine] = useState("");
   const [isGenerating, setIsGenerating] = useState(false);
   const [playing, setIsPlaying] = useState(false);
   const [audio, setAudio] = useState(null);
@@ -16,37 +20,37 @@ const Home = () => {
   const callGenerateEndpoint = async () => {
     setIsGenerating(true);
 
-    console.log('Calling OpenAI...');
-    const response = await fetch('/api/generate', {
-      method: 'POST',
+    console.log("Calling OpenAI...");
+    const response = await fetch("/api/generate", {
+      method: "POST",
       headers: {
-        'Content-Type': 'application/json',
+        "Content-Type": "application/json",
       },
       body: JSON.stringify({ userInput }),
     });
 
     const data = await response.json();
     const { output } = data;
-    console.log('OpenAI replied...', output.text);
+    console.log("OpenAI replied...", output.text);
 
     // If the line has less than two words, remove it:
     const finalOutput = output.text
-      .split('\n')
-      .filter((line) => !line.includes('Verse'))
-      .filter((line) => !line.includes('Chorus'))
-      .filter((line) => !line.includes(':'))
-      .filter((line) => line.split(' ').length > 2)
+      .split("\n")
+      .filter((line) => !line.includes("Verse"))
+      .filter((line) => !line.includes("Chorus"))
+      .filter((line) => !line.includes(":"))
+      .filter((line) => line.split(" ").length > 2)
       .slice(0, 12)
-      .join('\n');
+      .join("\n");
 
     setIsGenerating(false);
     handleSpeak(finalOutput);
   };
 
   const handleSpeak = (text) => {
-    console.log('handleSpeak', text);
-    let lines = text.split('\n');
-    setIsPlaying(true)
+    console.log("handleSpeak", text);
+    let lines = text.split("\n");
+    setIsPlaying(true);
     audio.play();
 
     // Display each line as it's played
@@ -55,7 +59,7 @@ const Home = () => {
       msg.rate = 1.3;
       msg.onstart = () => {
         setCurrentLine(line);
-        if(index === 0){
+        if (index === 0) {
           audio.volume = 0.2;
           audio.play();
         }
@@ -67,25 +71,25 @@ const Home = () => {
       if (line === lines[lines.length - 1]) {
         msg.onend = () => {
           setLyrics(text);
-          setIsPlaying(false)
-          setCurrentLine('');
+          setIsPlaying(false);
+          setCurrentLine("");
           audio.pause();
-        }
+        };
       }
 
       window.speechSynthesis.speak(msg);
     });
   };
 
-  const stopPlaying = () =>{
+  const stopPlaying = () => {
     window.speechSynthesis.cancel();
-    setIsPlaying(false)
+    setIsPlaying(false);
     audio.pause();
-  }
+  };
 
   useEffect(() => {
     if (audio) {
-        audio.volume = volume;
+      audio.volume = volume;
     }
   }, [audio, volume]);
 
@@ -99,54 +103,67 @@ const Home = () => {
         <title>GPT-Rapper</title>
       </Head>
       <div className="container">
-        <div className="header">
+        <motion.div
+          variants={headVariants}
+          initial="hidden"
+          whileInView="show"
+          className="header"
+        >
           <div className="header-title">
-            <h1>Eminem raps for you</h1>
+            <h1>EMINEM RAPS FOR YOU</h1>
           </div>
           <div className="header-subtitle">
             <h2>What do you want Eminem to rap about?</h2>
           </div>
-        </div>
+        </motion.div>
         <audio
           src={`/beat3.mp3`}
-          onCanPlay={(e) => e.target.volume = 0.2}
-
-          ref={(el) => { setAudio(el); }}
+          onCanPlay={(e) => (e.target.volume = 0.2)}
+          ref={(el) => {
+            setAudio(el);
+          }}
         />
-        <div className="prompt-container">
-          <textarea
+        <motion.div
+          variants={staggerContainer}
+          initial="hidden"
+          whileInView="show"
+          viewport={{ once: false, amount: 0.25 }}
+          className="prompt-container"
+        >
+          <motion.textarea
+            variants={textVariant(1.1)}
             placeholder="start typing here"
             className="prompt-box"
             value={userInput}
             onChange={onUserChangedText}
           />
-                  <input
+          <motion.input
+            variants={textVariant(1.1)}
             type="range"
             min={0}
             max={1}
             step={0.01}
             value={volume}
             onChange={(e) => setVolume(e.target.value)}
-        />
+          />
 
-          <div className="prompt-buttons">
+          <motion.div
+            variants={slideIn("right", "tween", 0.1, 0.7)}
+            className="prompt-buttons"
+          >
             <a
               className={
-                isGenerating ? 'generate-button loading' : 'generate-button'
+                isGenerating ? "generate-button loading" : "generate-button"
               }
               onClick={callGenerateEndpoint}
             >
               <div className="generate">
-                {isGenerating ? (
-                  <span className="loader"></span>
-                ) : (
-                  <p>RAP</p>
-                )}
+                {isGenerating ? <span className="loader"></span> : <p>RAP</p>}
               </div>
             </a>
-          </div>
+          </motion.div>
 
-          {/* Button that is visible if text-to-speech is playing that calls stop function */}  
+          {/* Button that is visible if text-to-speech is playing that calls stop function */}
           {playing && (
             <div className="prompt-buttons">
               <a className="generate-button" onClick={stopPlaying}>
@@ -162,12 +179,12 @@ const Home = () => {
               <div className="output-header">
                 <h3>{currentLine}</h3>
               </div>
-              <div className="output-content">
-                <p> {lyrics} </p>
+              <div className="output-content" >
+                <motion.p variants={textVariant(1.1)}> {lyrics} </motion.p>
               </div>
             </div>
           </div>
-        </div>
+        </motion.div>
       </div>
       {/* <div className="badge-container grow">
         <a
