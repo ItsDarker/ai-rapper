@@ -137,6 +137,9 @@ const Home = () => {
             value={userInput}
             onChange={onUserChangedText}
           />
+          <motion.p variants={textVariant(1.1)} className="vol">
+            volume of style
+          </motion.p>
           <motion.input
             variants={textVariant(1.1)}
             type="range"
@@ -179,7 +182,7 @@ const Home = () => {
               <div className="output-header">
                 <h3>{currentLine}</h3>
               </div>
-              <div className="output-content" >
+              <div className="output-content">
                 <motion.p variants={textVariant(1.1)}> {lyrics} </motion.p>
               </div>
             </div>

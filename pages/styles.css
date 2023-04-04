@@ -23,6 +23,10 @@
     position: relative;
 }
 
+.vol{
+    color: rgba(255, 255, 255, 0.5);
+}
+
 .container {
     display: flex;
     place-content: center flex-start;
